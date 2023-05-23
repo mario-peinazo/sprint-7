@@ -1,0 +1,42 @@
+.inputForm {
+  width: 150px;
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.submit {
+    margin-top: 10px;
+  width: 80px;
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+table {
+    text-align: left;
+    margin-top: 20px;
+    border-top: 5px solid black;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.orden {
+  width: 60px;
+  height: 30px;
+  font-size: 0.8rem;
+  margin-left: 10px;
+  background-color: rgba(7, 7, 7, 0.87);
+}
+
+h3 {
+  margin: 15px 0px;
+}
+
+.filaBotones{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.orange {
+  background-color: #ff9900
+}

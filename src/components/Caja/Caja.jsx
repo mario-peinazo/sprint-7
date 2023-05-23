@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import useLocalStorage from "../../useLocalStorage";
+import Ayuda from "../Ayuda/Ayuda";
+import { BotonAyuda, CajaBotones } from "./Caja.styles";
 
 
 const Caja = ({ onSomeEvent }) => {
@@ -8,15 +10,20 @@ const Caja = ({ onSomeEvent }) => {
   const [idiom, setIdiom] = useLocalStorage("idiom", 1);
   const [totalWeb, setTotalWeb] = useLocalStorage("precioWeb", 0);
 
+  const [mostrar, setMostrar] = useState(false);
+  const [cantidad, setCantidad] = useState(0);
+  const [clase, setClase] = useState("");
+
   useEffect(() => {
     setTotalWeb(pag * idiom * 30);
   }, [pag, idiom, setTotalWeb]);
 
   return (
     <>
+      <Ayuda isOpen={mostrar} onClose={() => setMostrar(false)} cantidad={cantidad} clase={clase} />
       <label>
         Número de páginas
-        <div className="cajaBotones">
+        <CajaBotones>
           <button
             onClick={() => {
               setPag(pag + 1);
@@ -42,11 +49,12 @@ const Caja = ({ onSomeEvent }) => {
           >
             -
           </button>
-        </div>
+          <BotonAyuda onClick={() => {setMostrar(true); setClase("páginas"); setCantidad(pag)}}>i</BotonAyuda>
+        </CajaBotones>
       </label>
       <label>
         Número de idiomas
-        <div className="cajaBotones">
+        <CajaBotones>
           <button
             onClick={() => {
               setIdiom(idiom + 1);
@@ -72,7 +80,8 @@ const Caja = ({ onSomeEvent }) => {
           >
             -
           </button>
-        </div>
+          <BotonAyuda onClick={() => {setMostrar(true); setClase("idiomas"); setCantidad(idiom)}}>i</BotonAyuda>
+        </CajaBotones>
       </label>
       <h5>Precio: {totalWeb}€</h5>
     </>
