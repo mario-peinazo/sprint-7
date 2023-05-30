@@ -5,7 +5,9 @@ import PropTypes from "prop-types";
 import useLocalStorage from "../../useLocalStorage";
 import GuardarPresu from "../GuardarPresu/GuardarPresu";
 
+
 const Presupuesto = () => {
+
   const [datos, setDatos] = useLocalStorage("datos", [
     {
       id: 0,
@@ -38,7 +40,7 @@ const Presupuesto = () => {
   const changePresu = (param) => setTotalWeb(param);
 
   const handleChange = (e) => {
-    const { value, checked, id } = e.target;
+    const { value, checked, id} = e.target;
 
     setDatos(
       datos.map((d) => (d.id == id ? { ...d, checked: !d.checked } : d))
@@ -46,7 +48,6 @@ const Presupuesto = () => {
 
     if (checked) {
       setTotal(total + Number(value));
-
       if (id == 0) {
         setPulsado(true);
       }
