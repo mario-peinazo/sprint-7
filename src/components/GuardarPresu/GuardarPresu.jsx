@@ -1,19 +1,19 @@
 import useLocalStorage from "../../useLocalStorage";
 import PropTypes from "prop-types";
 import "./Guardar.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const GuardarPresu = ({ precio, servicios }) => {
   const [datosForm, setDatosForm] = useLocalStorage("datosForm", []);
+  const [datosAct, setDatosAct] = useState([]);
 
   const [nombre, setNombre] = useLocalStorage("nombre", "");
   const [cliente, setCliente] = useLocalStorage("cliente", "");
   const fecha = new Date();
 
-  const [cambio, setCambio] = useState(false);
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    setDatosAct([]);
     setNombre(nombre);
     setCliente(cliente);
     createNewData(nombre, cliente, precio, servicios);
@@ -38,25 +38,22 @@ const GuardarPresu = ({ precio, servicios }) => {
   const ordenar = (n) => {
     switch (n) {
       case 0:
-        //NO SÉ CÓMO :(
+        setDatosAct([]);
         break;
       case 1:
-        datosForm.sort((x, y) => x.nombre.localeCompare(y.nombre));
+        setDatosAct(datosForm.map(data => ({...data})).sort((x, y) => x.nombre.localeCompare(y.nombre)));
         break;
       case 2:
-        datosForm.sort((x, y) => x.fechaHora.localeCompare(y.fechaHora));
+          setDatosAct(datosForm.map(data => ({...data})).sort((x, y) => x.fechaHora.localeCompare(y.fechaHora)));
         break;
     }
-    setCambio(!cambio);
   };
 
-  useEffect(() => {}, [cambio]);
-
-  const [buscar, setBuscar] = useState("")
+  const [buscar, setBuscar] = useState("");
 
   const buscarPresu = (valor) => {
-    setDatosForm(datosForm.filter(b => b.nombre === valor));
-  }
+    setDatosAct(datosForm.filter((b) => b.nombre === valor));
+  };
 
   return (
     <div>
@@ -90,21 +87,24 @@ const GuardarPresu = ({ precio, servicios }) => {
 
       <table>
         <thead>
-        <tr>
+          <tr>
             <td>
-            <label>
-            Buscar:
-            <input
-              type="text"
-              className="inputForm"
-              value={buscar}
-              placeholder="Presu 8"
-              onChange={(e) => setBuscar(e.target.value)}
-            />
-            <button className="orden orange" onClick={() => buscarPresu(buscar)}>
-                Buscar
-              </button>
-          </label>
+              <label>
+                Buscar:
+                <input
+                  type="text"
+                  className="inputForm"
+                  value={buscar}
+                  placeholder="Presu 8"
+                  onChange={(e) => setBuscar(e.target.value)}
+                />
+                <button
+                  className="orden orange"
+                  onClick={() => buscarPresu(buscar)}
+                >
+                  Buscar
+                </button>
+              </label>
             </td>
           </tr>
           <tr>
@@ -128,25 +128,45 @@ const GuardarPresu = ({ precio, servicios }) => {
           </tr>
         </thead>
         <tbody>
-          {datosForm.map((d, index) => {
-            return (
-              <>
-                <tr>
-                  <th>
-                    {`${index}- `}
-                    <u>{`${d.nombre} · ${d.fechaHora}`}</u>
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    {`${d.cliente} · ${
-                      d.precio
-                    }€ · Servicios: ${d.servicios.map((s) => ` ${s}`)}`}
-                  </td>
-                </tr>
-              </>
-            );
-          })}
+          {datosAct.length >= 1
+            ? datosAct.map((d, index) => {
+                return (
+                  <>
+                    <tr>
+                      <th>
+                        {`${index}- `}
+                        <u>{`${d.nombre} · ${d.fechaHora}`}</u>
+                      </th>
+                    </tr>
+                    <tr>
+                      <td>
+                        {`${d.cliente} · ${
+                          d.precio
+                        }€ · Servicios: ${d.servicios.map((s) => ` ${s}`)}`}
+                      </td>
+                    </tr>
+                  </>
+                );
+              })
+            : datosForm.map((d, index) => {
+                return (
+                  <>
+                    <tr>
+                      <th>
+                        {`${index}- `}
+                        <u>{`${d.nombre} · ${d.fechaHora}`}</u>
+                      </th>
+                    </tr>
+                    <tr>
+                      <td>
+                        {`${d.cliente} · ${
+                          d.precio
+                        }€ · Servicios: ${d.servicios.map((s) => ` ${s}`)}`}
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
         </tbody>
       </table>
     </div>
