@@ -5,8 +5,7 @@ import PropTypes from "prop-types";
 import useLocalStorage from "../../useLocalStorage";
 import GuardarPresu from "../GuardarPresu/GuardarPresu";
 
-
-const Presupuesto = () => {
+const Presupuesto = ( { hijoAPadre } ) => {
 
   const [datos, setDatos] = useLocalStorage("datos", [
     {
@@ -37,6 +36,8 @@ const Presupuesto = () => {
   const [totalWeb, setTotalWeb] = useLocalStorage("totalWeb", 30);
   const [totalP, setTotalP] = useLocalStorage("precioTotal", 0);
 
+  const [envDatos, setEnvDatos] = useLocalStorage({web: false, seo: false, googleads: false})
+
   const changePresu = (param) => setTotalWeb(param);
 
   const handleChange = (e) => {
@@ -57,6 +58,9 @@ const Presupuesto = () => {
         setPulsado(false);
       }
     }
+
+    setEnvDatos({web: datos[0].checked, seo: datos[1].checked, googleads: datos[2].checked})
+    hijoAPadre(envDatos)
   };
 
   useEffect(() => {
@@ -65,6 +69,7 @@ const Presupuesto = () => {
     } else {
       setTotalP(total);
     }
+
   }, [total, totalWeb, pulsado, setTotalP]);
 
   return (
@@ -121,6 +126,7 @@ const Presupuesto = () => {
 
 Presupuesto.propTypes = {
   onSomeEvent: PropTypes.func,
+  hijoAPadre: PropTypes.func
 };
 
 export default Presupuesto;
